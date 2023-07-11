@@ -3,6 +3,7 @@ import './Routeselector.css';
 import * as apiCall from './routeApifunc';
 import BusList from '../BusList/BusList';
 import SeatSelection from '../SeatSelection/SeatSelection';
+import PaymentTab from '../PaymentTab/PaymentTab';
 
 export default function Routeselector() {
   const [dataInp, setData] = useState('');
@@ -10,10 +11,11 @@ export default function Routeselector() {
   const [destination, setDestination] = useState('');
   const [date, setDate] = useState('');
   const [activeTab, setActiveTab] = useState('home');
+  const [selectedSeats, setSelectedSeats] = useState([]);
 
   const handleToCity = (e) => {
     e.preventDefault();
-    setDestination({ destination: e.target.value });
+    setDestination(e.target.value);
     localStorage.setItem('destination', e.target.value);
   };
 
@@ -25,7 +27,7 @@ export default function Routeselector() {
 
   const handleFromCity = (e) => {
     e.preventDefault();
-    setStartCity({ startCity: e.target.value });
+    setStartCity(e.target.value);
     localStorage.setItem('start', e.target.value);
   };
 
@@ -37,15 +39,20 @@ export default function Routeselector() {
 
   const getRoutes = (e) => {
     e.preventDefault();
-    if (startCity.startCity && destination.destination && date) {
+    if (startCity && destination && date) {
       apiCall
-        .getRoutesFromApi(startCity.startCity, destination.destination)
+        .getRoutesFromApi(startCity, destination)
         .then((response) => response.data)
         .then((data) => {
           setData(data.bus);
           setActiveTab('menu1');
         });
     }
+  };
+
+  const handleSelectedSeats = (seats) => {
+    setSelectedSeats(seats);
+    setActiveTab('menu2');
   };
 
   return (
@@ -80,9 +87,13 @@ export default function Routeselector() {
           <input type="submit" className="btn btn-primary btn-md getRoute" />
         </form>
 
-        <div className={`tab-pane container ${activeTab === 'menu1' ? 'active' : ''} mn-box`} id="menu1">
-          <SeatSelection />
-        </div>
+        {activeTab === 'menu1' && (
+          <SeatSelection onSelectedSeats={handleSelectedSeats} />
+        )}
+
+        {activeTab === 'menu2' && (
+          <PaymentTab selectedSeats={selectedSeats} />
+        )}
       </div>
     </div>
   );

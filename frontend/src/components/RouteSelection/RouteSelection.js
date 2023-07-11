@@ -7,6 +7,7 @@ import PaymentTab from '../PaymentTab/PaymentTab';
 export default function RouteSelection() {
   const history = useHistory();
   const [activeTab, setActiveTab] = useState('home');
+  const [activeFlightTab, setActiveFlightTab] = useState('flight');
 
   const handleUserIcon = (e) => {
     e.preventDefault();
@@ -29,6 +30,7 @@ export default function RouteSelection() {
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
+    setActiveFlightTab(tab);
   };
 
   const handleSubmit = (e) => {
@@ -84,7 +86,7 @@ export default function RouteSelection() {
           </li>
           <li className="nav-item">
             <a
-              className={`nav-link ${activeTab === 'flight' ? 'active' : ''}`}
+              className={`nav-link ${activeFlightTab === 'flight' ? 'active' : ''}`}
               data-toggle="pill"
               href="#flight"
               onClick={() => handleTabChange('flight')}
@@ -106,10 +108,10 @@ export default function RouteSelection() {
 
         <div className="tab-content">
           <div className={`tab-pane container ${activeTab === 'home' ? 'active' : ''} mn-box`} id="home">
-            <RouteSelector onSubmit={handleSubmit} />
+            {activeTab === 'home' && <RouteSelector onSubmit={handleSubmit} />}
           </div>
-          <div className={`tab-pane container ${activeTab === 'flight' ? 'active' : ''} mn-box`} id="flight">
-            <RouteSelector onSubmit={handleSubmit} />
+          <div className={`tab-pane container ${activeFlightTab === 'flight' ? 'active' : ''} mn-box`} id="flight">
+            {activeFlightTab === 'flight' && <RouteSelector onSubmit={handleSubmit} />}
           </div>
           <div className={`tab-pane container ${activeTab === 'menu2' ? 'active' : ''} mn-box`} id="menu2">
             <PaymentTab />

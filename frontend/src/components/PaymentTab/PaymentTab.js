@@ -11,7 +11,7 @@ import {
 } from "./utils";
 import "react-credit-cards/es/styles-compiled.css";
 
-export default class App extends React.Component {
+export default class PaymentTab extends React.Component {
   state = {
     number: "",
     name: "",
@@ -84,22 +84,20 @@ export default class App extends React.Component {
       });
     }
   };
-  
+
   localff = () => {
     let passArray = localStorage.getItem("nameData");
     if (passArray) {
       let nameArray = JSON.parse(passArray);
-     
-        return nameArray[0];
-      
+
+      return nameArray[0];
     }
   };
 
   renderSeatNumbers = () => {
-    let seatArray = localStorage.getItem("reservedSeats");
+    let seatArray = this.props.selectedSeats;
     if (seatArray) {
-      let seaArr = JSON.parse(seatArray);
-      return seaArr.map((seat, idx) => {
+      return seatArray.map((seat, idx) => {
         return <p key={idx}> {seat} </p>;
       });
     }
@@ -108,12 +106,9 @@ export default class App extends React.Component {
   getSumTotal = () => {
     let count = 0;
     let tax = 150;
-    let seatArray = localStorage.getItem("reservedSeats");
+    let seatArray = this.props.selectedSeats;
     if (seatArray) {
-      let seaArr = JSON.parse(seatArray);
-      for (let i = 0; i < seaArr.length; i++) {
-        count++;
-      }
+      count = seatArray.length;
       return (
         <div>
           <hr className="hr3" />
@@ -220,7 +215,7 @@ export default class App extends React.Component {
                   {this.renderNamesOfPassenger()} <hr className="hr3" />
                   <p className="hdng"> Ticket price </p>{" "}
                   <p className="hdng"> Tax </p>{" "}
-                  <p className="hdng"> Toal Sum </p>{" "}
+                  <p className="hdng"> Total Sum </p>{" "}
                 </div>{" "}
                 <div className="col-6">
                   <p className="hdng"> {this.localff()} </p>
